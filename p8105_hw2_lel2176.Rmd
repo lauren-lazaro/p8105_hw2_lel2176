@@ -3,3 +3,67 @@ title: "p8105_hw2_lel2176"
 output: github_document
 ---
 
+```{r}
+library(tidyverse)
+```
+
+#Problem 2
+
+#load in mr. trash wheel dataset and clean
+```{r}
+mr_trash_wheel = 
+  readxl::read_excel("data/trash_data.xlsx", "Mr. Trash Wheel") |> 
+  janitor::clean_names() |> 
+  rename(weight = weight_tons) |> 
+  rename(volume = volume_cubic_yards) |> 
+  select(dumpster, date, weight, volume, plastic_bottles, polystyrene, cigarette_butts, glass_bottles, grocery_bags, chip_bags, sports_balls, homes_powered) |> 
+  mutate(
+    homes_powered = (weight*500) / 30 , 
+    trash_wheel = "mr. trash"
+  )
+mr_trash_wheel
+```
+
+#load in prof. trash wheel dataset and clean
+```{r}
+prof_trash_wheel = 
+  readxl::read_excel("data/trash_data.xlsx", "Professor Trash Wheel") |> 
+  janitor::clean_names() |> 
+  rename(weight = weight_tons) |> 
+  rename(volume = volume_cubic_yards) |> 
+  select(dumpster, date, weight, volume, plastic_bottles, polystyrene, cigarette_butts, glass_bottles, grocery_bags, chip_bags, homes_powered) |> 
+  mutate(
+    homes_powered = (weight*500) / 30 ,
+    trash_wheel = "Prof. Trash"
+  )
+prof_trash_wheel
+```
+
+#load in gwynnda wheel dataset and clean
+```{r}
+gwyn_trash_wheel = 
+  readxl::read_excel("data/trash_data.xlsx", "Gwynnda Trash Wheel") |> 
+  janitor::clean_names() |> 
+  rename(weight = weight_tons) |> 
+  rename(volume = volume_cubic_yards) |> 
+  select(dumpster, date, weight, volume, plastic_bottles, polystyrene, cigarette_butts, plastic_bags, homes_powered) |> 
+  mutate(
+  homes_powered = (weight*500) / 30 ,
+  trash_wheel = "gwynnda trash"
+)
+gwyn_trash_wheel
+```
+
+# combine 3 datasets
+
+```{r}
+trash_data = 
+  bind_rows(mr_trash_wheel, prof_trash_wheel, gwyn_trash_wheel)
+trash_data
+```
+
+
+
+
+
+
