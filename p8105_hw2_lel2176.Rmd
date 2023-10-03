@@ -102,7 +102,7 @@ amyloid_data = read_csv("data/data_mci/mci_amyloid.csv")[-1,] |>
   rename(time_8 = na_6) |> 
   drop_na()
  
-mci_baseline_data
+
 baseline_data
 amyloid_data
 
