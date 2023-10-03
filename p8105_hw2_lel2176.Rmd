@@ -7,7 +7,7 @@ output: github_document
 library(tidyverse)
 ```
 
-#Problem 2
+## Problem 2
 
 #load in mr. trash wheel dataset and clean
 ```{r}
@@ -62,8 +62,53 @@ trash_data =
 trash_data
 ```
 
+## Problem 3
 
 
+```{r}
+
+mci_baseline_data = read_csv("data/data_mci/MCI_baseline.csv")[-1,] |> 
+  janitor::clean_names() |> 
+  rename(ID = x1) |> 
+  rename(current_age = age_at_the_study_baseline) |> 
+  rename(sex = x1_male_0_female) |> 
+  rename(education = years_of_education) |> 
+  rename(apoe4 = x1_apoe4_carrier_0_apoe4_non_carrier) |> 
+  rename(age_at_onset = age_at_the_onset_of_mci_missing_if_a_subject_remains_mci_free_during_the_follow_up_period) |> 
+    mutate(
+    sex = case_match(
+      sex, 
+      "0" ~ "male",
+      "1" ~ "female"
+    )
+  ) |> 
+    mutate(
+    apoe4 = case_match(
+      apoe4, 
+      "1" ~ "carrier",
+      "0" ~ "non-carrier"
+    )
+  )
+
+baseline_data = mci_baseline_data[!(mci_baseline_data$age_at_onset=="."),]
+
+amyloid_data = read_csv("data/data_mci/mci_amyloid.csv")[-1,] |> 
+  janitor::clean_names() |> 
+  rename(ID = study_id) |> 
+  rename(baseline = time_in_years_elapsed_since_the_study_baseline_to_the_visit_where_biomarker_amyloid_42_40_ratio_was_measured) |> 
+  rename(time_2 = na_3) |> 
+  rename(time_4 = na_4) |> 
+  rename(time_6 = na_5) |> 
+  rename(time_8 = na_6) |> 
+  drop_na()
+ 
+mci_baseline_data
+baseline_data
+amyloid_data
+
+merge_data = merge(baseline_data, amyloid_data, by.baseline_data = ID, by.amyloid_data = ID)
+merge_data
+```
 
 
 
