@@ -12,12 +12,12 @@ library(tidyverse)
 ### mr. trash wheel
 ```{r}
 mr_trash_wheel = 
-  readxl::read_excel("data/trash_data.xlsx", "Mr. Trash Wheel") |> 
+  readxl::read_excel("data/new_trash_data.xlsx", "Mr. Trash Wheel") |> 
   janitor::clean_names() |> 
   drop_na(dumpster) |> 
   rename(weight = weight_tons) |> 
   rename(volume = volume_cubic_yards) |> 
-  select(dumpster, date, weight, volume, plastic_bottles, polystyrene, cigarette_butts, glass_bottles, grocery_bags, chip_bags, sports_balls, homes_powered) |> 
+  select(dumpster, date, weight, volume, plastic_bottles, polystyrene, cigarette_butts, glass_bottles, plastic_bags, wrappers, sports_balls, homes_powered) |> 
   mutate(
     homes_powered = (weight*500) / 30 , 
     trash_wheel = "mr. trash"
@@ -26,18 +26,18 @@ mr_trash_wheel
 ```
 
 
-`mr_trash_wheel` is a dataset with `r nrow(mr_trash_wheel)` dumpsters and `r ncol(mr_trash_wheel)` variables. the variables provide information on all of the observed dumpsters which are labeled by their dumpster number `dumpster` and the date `date`.  each dumpster has recorded measures of their `weight` (measure in tons), `volume` (measured by cubic yards), specific numbers of each type of trash they contain, and the number of homes they have powered calculated by `homes_powered = (weight*500) / 30` since each ton of trash equates 500 kilowatts of energy and an average household uses 30 kilowatts per day. the last row of `mr_trash_wheel` was deleted because it was missing its dumpster number and date. the variable names were renamed in order to be easier to read and comprehend. the original variable columns `month` and `year` were removed since the date is already provided. the original variable column `homes_powered` was mutated in order to correctly calculate the number of homes powered by mr. trash wheel. lastly, a variable column `trash_wheel` was added in order to specify that these observed dumpsters belong to mr. trash wheel. 
+`mr_trash_wheel` is a dataset with `r nrow(mr_trash_wheel)` dumpsters and `r ncol(mr_trash_wheel)` variables. the variables provide information on all of the observed dumpsters which are labeled by their dumpster number `dumpster` and the date `date`.  each dumpster has recorded measures of their `weight` (measure in tons), `volume` (measured by cubic yards), specific numbers of each type of trash they contain, and the number of homes they have powered calculated by `homes_powered = (weight*500) / 30` since each ton of trash equates 500 kilowatts of energy and an average household uses 30 kilowatts per day. the last row of `mr_trash_wheel` was deleted because it was missing values for `dumpster` and `date`. the variable names were renamed in order to be easier to read and comprehend. the original variable columns `month` and `year` were removed since the date is already provided. the original variable column `homes_powered` was mutated in order to correctly calculate the number of homes powered by mr. trash wheel. lastly, a variable column `trash_wheel` was added in order to specify that these observed dumpsters belong to mr. trash wheel. 
 
 
 ### professor trash wheel
 ```{r}
 prof_trash_wheel = 
-  readxl::read_excel("data/trash_data.xlsx", "Professor Trash Wheel") |> 
+  readxl::read_excel("data/new_trash_data.xlsx", "Professor Trash Wheel") |> 
   janitor::clean_names() |> 
-  drop_na(dumpster) |> 
+  drop_na(dumpster, plastic_bottles) |> 
   rename(weight = weight_tons) |> 
   rename(volume = volume_cubic_yards) |> 
-  select(dumpster, date, weight, volume, plastic_bottles, polystyrene, cigarette_butts, glass_bottles, grocery_bags, chip_bags, homes_powered) |> 
+  select(dumpster, date, weight, volume, plastic_bottles, polystyrene, cigarette_butts, glass_bottles, plastic_bags, wrappers, homes_powered) |> 
   mutate(
     homes_powered = (weight*500) / 30 ,
     trash_wheel = "Prof. Trash"
@@ -46,13 +46,13 @@ prof_trash_wheel
 ```
 
 
-`prof_trash_wheel` is a dataset with `r nrow(prof_trash_wheel)` dumpsters and `r ncol(prof_trash_wheel)` variables. the variables provide information on all of the observed dumpsters which are labeled by their dumpster number `dumpster` and the date `date`.  each dumpster has recorded measures of their `weight` (measure in tons), `volume` (measured by cubic yards), specific numbers of each type of trash they contain, and the number of homes they have powered calculated by `homes_powered = (weight*500) / 30` since each ton of trash equates 500 kilowatts of energy and an average household uses 30 kilowatts per day. the last row of `prof_trash_wheel` was deleted because it was missing its dumpster number and date. the variable names were renamed in order to be easier to read and comprehend. the original variable columns `month` and `year` were removed since the date is already provided. the original variable column `homes_powered` was mutated in order to correctly calculate the number of homes powered by prof. trash wheel. lastly, a variable column `trash_wheel` was added in order to specify that these observed dumpsters belong to prof. trash wheel. the total amount of trash that prof. trash wheel collected is `r sum(prof_trash_wheel$plastic_bottles) + sum(prof_trash_wheel$polystyrene) + sum(prof_trash_wheel$cigarette_butts) + sum(prof_trash_wheel$glass_bottles) + sum(prof_trash_wheel$grocery_bags) + sum(prof_trash_wheel$chip_bags)`.
+`prof_trash_wheel` is a dataset with `r nrow(prof_trash_wheel)` dumpsters and `r ncol(prof_trash_wheel)` variables. the variables provide information on all of the observed dumpsters which are labeled by their dumpster number `dumpster` and the date `date`.  each dumpster has recorded measures of their `weight` (measure in tons), `volume` (measured by cubic yards), specific numbers of each type of trash they contain, and the number of homes they have powered calculated by `homes_powered = (weight*500) / 30` since each ton of trash equates 500 kilowatts of energy and an average household uses 30 kilowatts per day. `dumpter` `103` was removed because it contained multiple `na` values. the last row of `prof_trash_wheel` was deleted because it was missing values for `dumpster` and `date`. the variable names were renamed in order to be easier to read and comprehend. the original variable columns `month` and `year` were removed since the date is already provided. the original variable column `homes_powered` was mutated in order to correctly calculate the number of homes powered by prof. trash wheel. lastly, a variable column `trash_wheel` was added in order to specify that these observed dumpsters belong to prof. trash wheel. the total amount of trash that prof. trash wheel collected is `r sum(prof_trash_wheel$plastic_bottles) + sum(prof_trash_wheel$polystyrene) + sum(prof_trash_wheel$cigarette_butts) + sum(prof_trash_wheel$glass_bottles) + sum(prof_trash_wheel$grocery_bags) + sum(prof_trash_wheel$chip_bags)`.
 
 
 ### gwynda trash wheel
 ```{r}
 gwyn_trash_wheel = 
-  readxl::read_excel("data/trash_data.xlsx", "Gwynnda Trash Wheel") |> 
+  readxl::read_excel("data/new_trash_data.xlsx", "Gwynnda Trash Wheel") |> 
   janitor::clean_names() |> 
   drop_na(dumpster) |> 
   rename(weight = weight_tons) |> 
@@ -62,23 +62,24 @@ gwyn_trash_wheel =
   homes_powered = (weight*500) / 30 ,
   trash_wheel = "gwynnda trash"
 )
+
 gwyn_trash_wheel
 ```
 
 
-`gwyn_trash_wheel` is a dataset with `r nrow(gwyn_trash_wheel)` dumpsters and `r ncol(gwyn_trash_wheel)` variables. the variables provide information on all of the observed dumpsters which are labeled by their dumpster number `dumpster` and the date `date`.  each dumpster has recorded measures of their `weight` (measure in tons), `volume` (measured by cubic yards), specific numbers of each type of trash they contain, and the number of homes they have powered calculated by `homes_powered = (weight*500) / 30` since each ton of trash equates 500 kilowatts of energy and an average household uses 30 kilowatts per day. the second to last row of `gwyn_trash_wheel` was deleted because it only contained `na` values. the last row of `gwyn_trash_wheel` was deleted because it was missing its dumpster number and date. the variable names were renamed in order to be easier to read and comprehend. the original variable columns `month` and `year` were removed since the date is already provided. the original variable column `homes_powered` was mutated in order to correctly calculate the number of homes powered by gwynda trash wheel. lastly, a variable column `trash_wheel` was added in order to specify that these observed dumpsters belong to gwynda trash wheel. there are a few rows to highlight in `gwyn_trash_wheel`: dumpster numbers `45`, `46`, `85`, `95`, `96`, and `102` contain all `0` values for pieces of trash which could indicate periods of zero rainfall which is directly related to the amount of pollutants. the total number of cigarette butts that gwynda trash wheel collected in July 2021 is `r sum((gwyn_trash_wheel[gwyn_trash_wheel$date >= "2021-07-01" & gwyn_trash_wheel$date <= "2021-07-31", ])$cigarette_butts)`.
+`gwyn_trash_wheel` is a dataset with `r nrow(gwyn_trash_wheel)` dumpsters and `r ncol(gwyn_trash_wheel)` variables. the variables provide information on all of the observed dumpsters which are labeled by their dumpster number `dumpster` and the date `date`.  each dumpster has recorded measures of their `weight` (measure in tons), `volume` (measured by cubic yards), specific numbers of each type of trash they contain, and the number of homes they have powered calculated by `homes_powered = (weight*500) / 30` since each ton of trash equates 500 kilowatts of energy and an average household uses 30 kilowatts per day. the second to last row of `gwyn_trash_wheel` was deleted because it only contained `na` values. the last row of `gwyn_trash_wheel` was deleted because it was missing its dumpster number and date. a lot of dumpsters in `gwyn_trash_wheel` were missing values for `wrappers`. although some of the rows did contain values for `wrappers` I made the decision to delete this column for the sake of readability and so that all of the `dumpsters` in `gwyn_trash_wheel` can be fairly compared. the variable names were renamed in order to be easier to read and comprehend. the original variable columns `month` and `year` were removed since the date is already provided. the original variable column `homes_powered` was mutated in order to correctly calculate the number of homes powered by gwynda trash wheel. lastly, a variable column `trash_wheel` was added in order to specify that these observed dumpsters belong to gwynda trash wheel. there are a few rows to highlight in `gwyn_trash_wheel`: dumpster numbers `45`, `46`, `85`, `95`, `96`, and `102` contain all `0` values for pieces of trash which could indicate periods of zero rainfall which is directly related to the amount of pollutants. the total number of cigarette butts that gwynda trash wheel collected in July 2021 is `r sum((gwyn_trash_wheel[gwyn_trash_wheel$date >= "2021-07-01" & gwyn_trash_wheel$date <= "2021-07-31", ])$cigarette_butts)`.
 
 
 ### combine 3 datasets
 ```{r}
 trash_data = 
   bind_rows(mr_trash_wheel, prof_trash_wheel, gwyn_trash_wheel) |> 
-  select(dumpster, date, weight, volume, plastic_bottles, polystyrene, cigarette_butts, homes_powered, trash_wheel)
+  select(dumpster, date, weight, volume, plastic_bottles, polystyrene, cigarette_butts, plastic_bags, homes_powered, trash_wheel)
 trash_data
 ```
 
 
-`mr_trash_wheel`, `prof_trash_wheel`, and `gwyn_trash_wheel` were combined in order to compare their data. It is important that the variable column `trash_wheel` was created in order to differentiate which dumpster belonged to which wheel. the variables `dumpster`, `date`, `weight`, `volume`, and `homes_powered` were included because they give important descriptions of each dumpster. the only trash-type variables that were kept in the combined dataset were `plastic_bottles`, `polystyrene`, `cigarette_butts` because they were the only pollutants that were recorded for all three dumpsters. for example, `sports_balls	` was only found in `mr_trash_wheel`, so the entire column was removed from the combined dataset because there was no other data to compare it to for the other two dumpsters. 
+`mr_trash_wheel`, `prof_trash_wheel`, and `gwyn_trash_wheel` were combined in order to compare their data. It is important that the variable column `trash_wheel` was created in order to differentiate which dumpster belonged to which wheel. the variables `dumpster`, `date`, `weight`, `volume`, and `homes_powered` were included because they give important descriptions of each dumpster. the only trash-type variables that were kept in the combined dataset were `plastic_bottles`, `polystyrene`, `cigarette_butts`, and `palstic_bags`, because they were the only pollutants that were recorded for all three dumpsters. for example, `sports_balls	` was only found in `mr_trash_wheel`, so the entire column was removed from the combined dataset because there was no other data to compare it to for the other two dumpsters. 
 
 
 # Problem 3
